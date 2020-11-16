@@ -1,0 +1,20 @@
+安装挂载助手
+sudo yum install -y amazon-efs-utils
+
+临时挂载
+
+sudo mount -t efs -o tls,accesspoint=fsap-0a5170e0ebcb26dda fs-f7b1f6f2:/ /home/ec2-user/redis
+				挂载点		EFS名	     挂载位置
+
+永久挂载  /etc/fstab位置
+
+fs-48f8bf4d:/ /home/ec2-user/redis efs _netdev,tls,accesspoint=fsap-0ba1450583b1eb43a 0 0
+EFS名	     挂载位置				 挂载点
+
+运行fstab挂载
+sudo mount -a
+验证
+mount
+卸载
+umount /home/ec2-user/redis
+	挂载位置

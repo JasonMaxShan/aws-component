@@ -1,0 +1,6 @@
+FROM    amazonlinux
+ENV     AWS_DEFAULT_REGION=cn-northwest-1
+COPY    conf.toml /
+COPY    server_music /
+RUN     chmod a+x server_music
+CMD     nohup /server_music

@@ -1,0 +1,13 @@
+1.IAM授权
+  IAM->创建角色->EC2ContainerRegistryFullAccess
+2.给壁垒机附加IAM角色
+3.在壁垒机获得ECR登录密钥
+  aws ecr get-login --region cn-northwest-1 --no-include-email
+4.docker登录
+  docker login -u AWS -p ****
+5.加载镜像
+  docker load -i jaychou.tar
+6.重新标记镜像
+  docker tag jaychou:v1 374284294913.dkr.ecr.cn-northwest-1.amazonaws.com.cn/onlyellow:latest
+7.推送images
+  docker push 374284294913.dkr.ecr.cn-northwest-1.amazonaws.com.cn/onlyellow:latest

@@ -1,0 +1,16 @@
+1.进入ElastiCache,创建缓存子网组
+2.创建一个给Memcached集群使用的安全组，对EC2的安全组开放11211端口
+3.选择名称，选择VPC的私有子网
+4.创建Memcached，点开高级Memcached设置，选择子网组和安全组
+5.点击创建，等待完成，可以在EC2安装telnet测试连通性
+
+安装telnet		sudo yum install telnet
+
+连接节点		telnet mycachecluster.eaogs8.0001.usw2.cache.amazonaws.com 11211
+
+成功后会有类似输出	Trying 128.0.0.1...
+		Connected to mycachecluster.eaogs8.0001.usw2.cache.amazonaws.com.
+		Escape character is '^]'.
+		>
+
+退出		quit

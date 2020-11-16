@@ -1,0 +1,46 @@
+1.准备好VPC和堡垒机
+2.建立VPC终端节点（确保VPC的内网DNS服务开启），选择提供服务的私有子网，安全组选择向VPC内组件开放443端口
+3.创建私有REST API，创建方法后修改资源策略
+*复制的VPC的ID复制到aws:sourceVpc一行，删除两行“Resource”的占位符
+修改完的资源策略模板：
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "arn:aws-cn:execute-api:cn-northwest-1:148218409218:g07rggb2g0/*",
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:sourceVpc": "vpc-08355dd69ce75ca34"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "arn:aws-cn:execute-api:cn-northwest-1:148218409218:g07rggb2g0/*"
+        }
+    ]
+}
+4.修改终端节点的策略
+*将API的ARN复制到策略的“Resource”中
+终端节点策略模板：
+{
+    "Statement": [
+        {
+            "Principal": "*",
+            "Action": [
+                "execute-api:Invoke"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:execute-api:us-east-1:123412341234:aaaaa11111/*"
+            ]
+        }
+    ]
+}
+5.部署API
+6.用堡垒机测试可用性
