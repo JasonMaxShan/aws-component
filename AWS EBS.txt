@@ -32,9 +32,15 @@ mount [卷名] [目录名]
 	验证
 	mount
 	卸载
-	umount /home/ec2-user/redis
+	umount -v /home/ec2-user/redis
 			挂载位置
 
+6.查看可用磁盘空间
+您可以获得有关您的 EBS 卷的其他信息，例如该实例的 Linux 操作系统上有多少空间磁盘可用。例如，使用以下命令：
+df -hT /dev/xvda1
+	卷名
+
+https://docs.amazonaws.cn/AWSEC2/latest/UserGuide/AmazonEBS.html
 Fstab的相关参数
 <file systems> - 要挂载的分区或存储设备.
 <dir> - <file systems>的挂载位置。
