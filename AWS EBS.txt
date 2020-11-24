@@ -1,0 +1,45 @@
+1.创建卷并附加卷在EC2上
+lsblk查看是否附加成功
+
+2.刚附加的EBS卷是没有文件系统的
+sudo file -s [卷名]来验证是否有文件系统
+*没有文件系统的状态
+/dev/xvdf: data
+*已经有了文件系统的状态
+/dev/xvda1: SGI XFS filesystem data (blksz 4096, inosz 512, v2 dirs)
+
+3.为空白的卷创建文件系统，此举会格式化整个卷
+sudo mkfs -t xfs [卷名]
+*如果出现“找不到 mkfs.xfs”错误，请使用以下命令安装 XFS 工具，然后重复上一命令：
+sudo yum install xfsprogs
+
+4.挂载卷（暂时）
+mount [卷名] [目录名]
+
+5.挂载卷（开机自动挂载）
+	1.使用 blkid 命令查找设备的 UUID，记住所需挂载的卷的UUID
+	*Blkid命令需要root权限
+	sudo blkid
+
+	2. 使用任何文本编辑器打开/etc/fstab文件
+	sudo vim /etc/fstab
+
+	3.将以下条目添加到 /etc/fstab 以在指定的挂载点挂载设备。这些字段是blkid返回的 UUID 值、挂载点、文件系统以及建议的文件系统挂载选项
+	UUID=aebf131c-6957-451e-8d34-ec978d9581ae  /data	xfs	defaults,nofail  0  2
+ 		UUID 值			           挂载点	文件系统	挂载选项
+	4.运行fstab挂载
+	sudo mount -a
+	验证
+	mount
+	卸载
+	umount /home/ec2-user/redis
+			挂载位置
+
+Fstab的相关参数
+<file systems> - 要挂载的分区或存储设备.
+<dir> - <file systems>的挂载位置。
+<type> - 要挂载设备或是分区的文件系统类型，支持许多种不同的文件系统ext2, ext3, ext4, reiserfs, xfs, jfs, smbfs, iso9660, vfat, ntfs, swap 及 auto。 设置成auto类型，mount 命令会猜测使用的文件系统类型，对 CDROM 和 DVD 等移动设备是非常有用的。
+<options> - 挂载时使用的参数，注意有些mount 参数是特定文件系统才有的。
+<dump> dump 工具通过它决定何时作备份. dump 会检查其内容，并用数字来决定是否对这个文件系统进行备份。 允许的数字是 0 和 1 。0 表示忽略， 1 则进行备份。大部分的用户是没有安装 dump 的 ，对他们而言 <dump> 应设为 0。
+<pass> fsck 读取 <pass> 的数值来决定需要检查的文件系统的检查顺序。允许的数字是0, 1, 和2。 根目录应当获得最高的优先权 1, 其它所有需要被检查的设备设置为 2. 0 表示设备不会被 fsck 所检查。
+<nofail>如果这个设备不存在，不报告错误信息
