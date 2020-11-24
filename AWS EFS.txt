@@ -1,20 +1,49 @@
+每个可用区中的一个挂载目标（不考虑每个可用区中的子网数）。
 安装挂载助手
 sudo yum install -y amazon-efs-utils
 
+1、挂载根目录
 临时挂载
+sudo mount -t efs fs-0b7ddcee:/ efs/
+		EFS名	   挂载点
+开机自动挂载
+修改/etc/fstab
+fs-0b7ddcee:/ /home/ec2-user/efs/ efs _netdev,tls 0 0
+EFS名	      挂载点
 
-sudo mount -t efs -o tls,accesspoint=fsap-0a5170e0ebcb26dda fs-f7b1f6f2:/ /home/ec2-user/redis
+挂载后的初始权限
+drwxr-xr-x 2 root     root     6144 Nov 24 07:14 .
+drwx------ 4 ec2-user ec2-user   85 Nov 24 07:14 ..
+所以普通用户没有在这个挂载点创建文件的权限
+要将 Amazon EFS 文件系统所有权更改为非根 用户和组，请使用以下命令：
+sudo chown user:group /efs
+要更改文件系统的权限使其更加宽松，请使用以下命令： 
+sudo chmod 777 /efs
+该命令为所有挂载了文件系统的 EC2 实例上的所有用户授予读写执行权限。
+
+
+2、挂载EFS挂载点
+临时挂载
+sudo mount -t efs -o tls,accesspoint=fsap-0a5170e0ebcb26dda fs-f7b1f6f2:/ /home/ec2-user/efs
 				挂载点		EFS名	     挂载位置
-
-永久挂载  /etc/fstab位置
-
-fs-48f8bf4d:/ /home/ec2-user/redis efs _netdev,tls,accesspoint=fsap-0ba1450583b1eb43a 0 0
+永久挂载  
+修改/etc/fstab
+fs-48f8bf4d:/ /home/ec2-user/efs efs _netdev,tls,accesspoint=fsap-0ba1450583b1eb43a 0 0
 EFS名	     挂载位置				 挂载点
+
+挂载点的权限，一个常见配置是 755。确保为接入点用户设置了执行位，使得他们能够执行装载操作。此配置向目录拥有者授予在目录中输入、列出和写入新文件的权限。它向所有其他用户授予输入和列出文件的权限。
+POSIX 用户 - (可选)
+NFS 客户端在接入点上用于所有文件操作的完整 POSIX 身份。 
+如果挂载的是EFS内的目录，如果未设置该权限，将无法在该目录内创建文件。
+
+根目录创建权限 - (可选)
+如果该目录尚不存在，EFS 将使用这些权限自动创建指定的根目录。 
+如果挂载的是EFS内的目录，如果未设置该权限，将无法挂载目录。
 
 运行fstab挂载
 sudo mount -a
 验证
 mount
 卸载
-umount /home/ec2-user/redis
+umount /home/ec2-user/efs
 	挂载位置
