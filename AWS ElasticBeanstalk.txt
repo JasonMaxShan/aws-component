@@ -1,0 +1,25 @@
+EB-EC2-ROLE
+更新过期的默认实例配置文件
+如果默认实例配置文件缺少必需的权限，您可以通过在 Elastic Beanstalk 环境管理控制台中创建新环境来更新它。
+或者，可以向附加到默认实例配置文件的角色手动添加托管策略。
+向附加到默认实例配置文件的角色添加托管策略
+在 IAM 控制台中，打开角色页面。
+选择 aws-elasticbeanstalk-ec2-role。
+在权限选项卡上，选择 Attach policies (附加策略)。
+键入 AWSElasticBeanstalk 以筛选策略。
+
+选择下列策略，然后选择附加策略：
+
+AWSElasticBeanstalkWebTier
+AWSElasticBeanstalkWorkerTier
+AWSElasticBeanstalkMulticontainerDocker
+
+
+EB-SERVICE-ROLE
+选择下列策略，然后选择附加策略：
+
+AWSElasticBeanstalkEnhancedHealth
+AWSElasticBeanstalkService
+
+配置顺序
+预设->实例->容量->安全性->网络->负载均衡->数据库(optional)
