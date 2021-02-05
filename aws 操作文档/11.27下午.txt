@@ -1,0 +1,21 @@
+
+一、##S3 & 终端节点
+
+二、API Gateway
+1.##REST API
+2.HTTP API
+3.触发Lambda  （HTTP API v1 v2）
+
+三、ECR 两种登录方式
+
+四、引导程序
+1.分别启动彩蛋和server
+
+作业
+1.###创建只能通过VPC内访问S3
+2.ECR两种登录方式
+3.引导程序编写
+4.私有REST API搭建，并触发Lambda接收，打印Method和body
+5.HTTP API搭建
+（1）v1触发Lambda接收，打印Method和body
+（2）v2触发Lambda接收，打印Method和body

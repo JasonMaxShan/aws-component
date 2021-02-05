@@ -1,0 +1,129 @@
+
+
+#Lambda获取触发器
+for rec in event["Records"]:
+        if rec["eventName"] == "MODIFY":
+            old_img = rec["dynamodb"]["OldImage"]
+            new_img = rec["dynamodb"]["NewImage"]
+            print(old_img)
+            print(new_img)
+
+
+#resource方法获取dynamoDB
+import json
+import boto3
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('user1')
+
+def lambda_handler(event, context):
+    # TODO implement
+    
+    response = table.get_item(
+        Key={
+            'id': '1'
+        }
+    )
+    item = response['Item']
+    print(item)
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+
+
+
+
+#client方法获取dynamoDB   get_item
+client = boto3.client('dynamodb')
+response = client.get_item(
+        Key={
+            'id': {
+                'S': '1',
+            }
+        },
+        TableName='user1',
+    )
+    item = response["Item"]
+    print(item)
+
+
+#put_item   没有就插入，有的话就覆盖
+    response = client.put_item(
+        Item={
+            'id': {
+                'S': '2',
+            },
+            'name': {
+                'S': 'cstor',
+            }
+        },
+        ReturnConsumedCapacity='TOTAL',
+        TableName='user1',
+    )
+    print(response)
+
+
+####update_item     没有就插入，有就只更新部分
+client = boto3.client('dynamodb')
+
+def lambda_handler(event, context):
+    # TODO implement
+    response = client.update_item(
+        TableName='user1',
+        Key={
+            'id': {
+                'S': '3'
+            }
+        },
+        AttributeUpdates={
+            'name': {
+                'Value': {
+                    'S': 'beijing',
+                }
+            }
+        }
+    )
+
+    print(response)
+   
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+
+
+#delete_item
+
+#scan
+
+#query
+
+######################################################
+
+总结
+一、SSM
+1.出站端口
+2.NAT
+
+二、EB
+1.创建
+
+三、DynamoDB
+1.触发Lambda，如何接收
+2.boto3操作DynamoDB：增删改查
+3.作业
+
+作业
+1.####SSM操作
+2.EB####  （1）Python示例程序  （2）搭建WordPress
+3.DynamoDB 
+（1）触发器
+（2）boto3操作dynamoDB  增删改查  query   scan
+
+
+
+
+
+
